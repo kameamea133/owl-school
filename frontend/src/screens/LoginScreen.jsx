@@ -1,14 +1,35 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import FormContainer from '../components/FormContainer';
+import { useDispatch, useSelector } from 'react-redux';
+import { useLoginMutation } from '../slices/usersApiSlice';
+import { setCredentials } from '../slices/authSlice';
 
 const LoginScreen = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    const SubmiitHandler = async (e) => {
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const [login] = useLoginMutation();
+
+    const { userInfo } = useSelector((state) => state.auth);
+
+    useEffect(() => {
+      if (userInfo) {
+        navigate('/');
+      }
+    }, [userInfo, navigate]);
+
+    const SubmitHandler = async (e) => {
         e.preventDefault();
-        console.log('submit')
+        try {
+          const res = await login({ email, password }).unwrap();
+          dispatch(setCredentials({ ...res }));
+          navigate('/');
+        } catch (err) {
+          console.log(err?.data.message || err.error);
+        }
 
     }
 
@@ -17,7 +38,7 @@ const LoginScreen = () => {
     <FormContainer>
       <h1 className="text-2xl font-bold mb-6 text-center">Sign In</h1>
 
-      <form onSubmit={SubmiitHandler} className="space-y-4">
+      <form onSubmit={SubmitHandler} className="space-y-4">
         <div className="my-2">
           <label htmlFor="email" className="block text-sm font-medium text-gray-700">
             Email Address
