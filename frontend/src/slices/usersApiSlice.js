@@ -13,12 +13,25 @@ export const usersApiSlice = apiSlice.injectEndpoints({
             }),
         }),
         register: builder.mutation({
-            query: (data) => ({
-                url: `${USERS_URL}`,
-                method: 'POST',
-                body: data
-            }),
-        }),
+  query: (data) => {
+    const formData = new FormData();
+    formData.append('name', data.name);
+    formData.append('email', data.email);
+    formData.append('password', data.password);
+    
+    
+    if (data.profileImage) {
+      formData.append('profileImage', data.profileImage);
+    }
+
+    return {
+      url: `${USERS_URL}`,
+      method: 'POST',
+      body: formData,  
+    };
+  },
+}),
+
         logout: builder.mutation({
             query: () => ({
               url: `${USERS_URL}/logout`,
@@ -26,12 +39,25 @@ export const usersApiSlice = apiSlice.injectEndpoints({
             }),
           }),
           updateUser: builder.mutation({
-            query: (data) => ({
-              url: `${USERS_URL}/profile`,
-              method: 'PUT',
-              body: data
-            }),
-          }),
+  query: (data) => {
+    const formData = new FormData();
+    formData.append('name', data.name);
+    formData.append('email', data.email);
+    formData.append('password', data.password);
+    
+    
+    if (data.profileImage) {
+      formData.append('profileImage', data.profileImage);
+    }
+
+    return {
+      url: `${USERS_URL}/profile`,
+      method: 'PUT',
+      body: formData,  
+    };
+  },
+}),
+
     }),
 });
 

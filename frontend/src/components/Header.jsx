@@ -21,7 +21,7 @@ const Header = () => {
       console.log(error);
     }
   }
-  
+  console.log(user);
   const [isOpen, setIsOpen] = useState(false);
  
   // Fonction pour toggle le menu mobile
@@ -68,7 +68,7 @@ const Header = () => {
         {user ? (
             <>
             <img
-                src={user.profileImage || "/defaultAvatar.png"}
+                src={user.profileImage }
                 alt="Profile Avatar"
                 className="w-12 h-12 rounded-full object-cover" 
               />
