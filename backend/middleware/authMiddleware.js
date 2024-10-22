@@ -3,7 +3,7 @@ import asyncHandler from "express-async-handler";
 import User from "../models/userModel.js";
 
 const protect = asyncHandler(async (req, res, next) => {
-    let token = req.cookies.jwt; // Récupérer le token depuis les cookies
+    let token = req.cookies.jwt; 
 
     if (!token) {
         res.status(401);
@@ -12,7 +12,7 @@ const protect = asyncHandler(async (req, res, next) => {
 
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        req.user = await User.findById(decoded.userId).select("-password"); // Cherche l'utilisateur sans renvoyer le mot de passe
+        req.user = await User.findById(decoded.userId).select("-password"); 
 
         if (!req.user) {
             res.status(401);
