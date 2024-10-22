@@ -41,38 +41,42 @@ const Header = () => {
   };
 
   const handleSignUp = () => {
-    navigate("/register"); // Redirection vers /register
-    setIsOpen(false); // Fermer le menu après la redirection
+    navigate("/register"); 
+    setIsOpen(false); 
   };
 
- 
 
   return (
     <header className="bg-black w-full sticky top-0 z-50">
       <nav className="container mx-auto px-4 py-4 flex items-center justify-between">
-        {/* Titre à gauche */}
+        {/* left - logo */}
         <div onClick={handleLogoClick} className="text-white font-bold text-xl flex items-center gap-2 cursor-pointer">
           <img src="/logoMyTeachersApp.png" alt="logo" className="w-20 h-20 rounded-full" />
           Owl School
         </div>
 
-        {/* Icône Hamburger ou Fermeture pour mobile */}
+        {/* icon menu */}
         <div className=" z-50 md:hidden">
           <button onClick={toggleMenu} className="text-white focus:outline-none">
             {isOpen ? <FaTimes className="text-2xl" /> : <FaBars className="text-2xl" />}
           </button>
         </div>
 
-        {/* Boutons à droite - visibles sur grands écrans */}
+        {/* right buttons on wide screen */}
         <div className="hidden md:flex space-x-4">
         
         {user ? (
             <>
-              <span className="block py-2 px-4 bg-white text-blue-600 rounded-lg">
-                {user.name} {/* Afficher le nom de l'utilisateur */}
+            <img
+                src={user.profileImage || "/defaultAvatar.png"}
+                alt="Profile Avatar"
+                className="w-12 h-12 rounded-full object-cover" 
+              />
+              <span className="block py-2 px-4  text-white ">
+                Welcome {user.name} 
               </span>
               <button
-                onClick={handleProfileClick} // Redirection vers la page profil
+                onClick={handleProfileClick} 
                 className="block py-2 px-4 bg-white text-green-600 rounded-lg hover:bg-gray-100"
               >
                 Profile
@@ -86,7 +90,7 @@ const Header = () => {
             </>
           ) : (
             <>
-              {/* Si l'utilisateur n'est pas connecté, afficher Sign In et Sign Up */}
+              {/* if not logged in - sign in and sign up */}
               <button
                 onClick={handleSignIn}
                 className="block py-2 px-4 bg-white text-blue-600 rounded-lg hover:bg-gray-100"
@@ -104,7 +108,7 @@ const Header = () => {
         </div>
       </nav>
 
-      {/* Menu mobile - visible seulement lorsque l'icône hamburger est cliqué */}
+      {/* mobile menu */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -114,17 +118,20 @@ const Header = () => {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
           >
-            <ul className="text-center space-y-4">
+            <ul className="text-center space-y-4 mt-20">
             {user ? (
                 <>
-                  <li>
-                    <span className="block py-2 px-4  w-40 bg-blue-500 text-white rounded-lg mt-20">
-                      {user.name}
-                    </span>
+                <li className="flex items-center justify-center space-x-2">
+                    <img
+                      src={user.profileImage || "/defaultAvatar.png"} 
+                      alt="Profile Avatar"
+                      className="w-10 h-10 rounded-full object-cover"
+                    />
+                    <span className="text-white">{user.name}</span> 
                   </li>
                   <li>
                     <button
-                      onClick={handleProfileClick} // Redirection vers la page profil
+                      onClick={handleProfileClick} 
                       className="block py-2 px-4  w-40 bg-green-500 hover:bg-green-700 text-white rounded-lg"
                     >
                       Profile
@@ -132,7 +139,7 @@ const Header = () => {
                   </li>
                   <li>
                     <button
-                      onClick={logoutHandler} // Déconnexion
+                      onClick={logoutHandler} 
                       className="block py-2 px-4  w-40 bg-red-500 hover:bg-red-700 text-white rounded-lg"
                     >
                       Logout
