@@ -2,15 +2,38 @@ import { useState } from "react";
 import { FaBars, FaTimes } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { useLogoutMutation } from "../slices/usersApiSlice";
+import { logout } from "../slices/authSlice";
 
 const Header = () => {
-  const [isOpen, setIsOpen] = useState(false);
+  const user = useSelector((state) => state.auth.userInfo);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [logoutApiCall] = useLogoutMutation();
+
+  const logoutHandler = async () => {
+    try {
+      await logoutApiCall().unwrap();
+      dispatch(logout());
+      navigate("/login");
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  
+  const [isOpen, setIsOpen] = useState(false);
+ 
   // Fonction pour toggle le menu mobile
   const toggleMenu = () => setIsOpen(!isOpen);
 
   const handleLogoClick = () => {
     navigate('/'); // Redirection vers la page d'accueil
+  };
+
+  const handleProfileClick = () => {
+    navigate("/profile");
+    setIsOpen(false); // Fermer le menu après la redirection
   };
   const handleSignIn = () => {
     navigate("/login"); // Redirection vers /login
@@ -21,6 +44,8 @@ const Header = () => {
     navigate("/register"); // Redirection vers /register
     setIsOpen(false); // Fermer le menu après la redirection
   };
+
+ 
 
   return (
     <header className="bg-black w-full sticky top-0 z-50">
@@ -40,18 +65,42 @@ const Header = () => {
 
         {/* Boutons à droite - visibles sur grands écrans */}
         <div className="hidden md:flex space-x-4">
-        <button
-            onClick={handleSignIn}
-            className="block py-2 px-4 bg-white text-blue-600 rounded-lg hover:bg-gray-100"
-          >
-            Sign In
-          </button>
-          <button
-            onClick={handleSignUp}
-            className="block py-2 px-4 bg-white text-blue-600 rounded-lg hover:bg-gray-100"
-          >
-            Sign Up
-          </button>
+        
+        {user ? (
+            <>
+              <span className="block py-2 px-4 bg-white text-blue-600 rounded-lg">
+                {user.name} {/* Afficher le nom de l'utilisateur */}
+              </span>
+              <button
+                onClick={handleProfileClick} // Redirection vers la page profil
+                className="block py-2 px-4 bg-white text-green-600 rounded-lg hover:bg-gray-100"
+              >
+                Profile
+              </button>
+              <button
+                onClick={logoutHandler}
+                className="block py-2 px-4 bg-white text-red-600 rounded-lg hover:bg-gray-100"
+              >
+                Logout
+              </button>
+            </>
+          ) : (
+            <>
+              {/* Si l'utilisateur n'est pas connecté, afficher Sign In et Sign Up */}
+              <button
+                onClick={handleSignIn}
+                className="block py-2 px-4 bg-white text-blue-600 rounded-lg hover:bg-gray-100"
+              >
+                Sign In
+              </button>
+              <button
+                onClick={handleSignUp}
+                className="block py-2 px-4 bg-white text-blue-600 rounded-lg hover:bg-gray-100"
+              >
+                Sign Up
+              </button>
+            </>
+          )}
         </div>
       </nav>
 
@@ -66,22 +115,50 @@ const Header = () => {
             transition={{ duration: 0.3 }}
           >
             <ul className="text-center space-y-4">
-              <li>
-              <button
-                  onClick={handleSignIn}
-                  className="block py-2 px-4 bg-blue-500 hover:bg-blue-700 text-white rounded-lg"
-                >
-                  Sign In
-                </button>
-              </li>
-              <li>
-              <button
-                  onClick={handleSignUp}
-                  className="block py-2 px-4 bg-blue-500 hover:bg-blue-700 text-white rounded-lg"
-                >
-                  Sign Up
-                </button>
-              </li>
+            {user ? (
+                <>
+                  <li>
+                    <span className="block py-2 px-4  w-40 bg-blue-500 text-white rounded-lg mt-20">
+                      {user.name}
+                    </span>
+                  </li>
+                  <li>
+                    <button
+                      onClick={handleProfileClick} // Redirection vers la page profil
+                      className="block py-2 px-4  w-40 bg-green-500 hover:bg-green-700 text-white rounded-lg"
+                    >
+                      Profile
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      onClick={logoutHandler} // Déconnexion
+                      className="block py-2 px-4  w-40 bg-red-500 hover:bg-red-700 text-white rounded-lg"
+                    >
+                      Logout
+                    </button>
+                  </li>
+                </>
+              ) : (
+                <>
+                  <li>
+                    <button
+                      onClick={handleSignIn}
+                      className="block py-2 px-4 bg-blue-500 hover:bg-blue-700 text-white rounded-lg"
+                    >
+                      Sign In
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      onClick={handleSignUp}
+                      className="block py-2 px-4 bg-blue-500 hover:bg-blue-700 text-white rounded-lg"
+                    >
+                      Sign Up
+                    </button>
+                  </li>
+                </>
+              )}
             </ul>
           </motion.div>
         )}

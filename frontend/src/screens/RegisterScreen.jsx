@@ -1,6 +1,11 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import FormContainer from '../components/FormContainer';
+import { toast } from 'react-toastify';
+import Spinner from '../components/Spinner';
+import { useRegisterMutation } from '../slices/usersApiSlice';
+import { setCredentials } from '../slices/authSlice';
 
 const RegisterScreen = () => {
     const [name, setName] = useState('');
@@ -8,9 +13,31 @@ const RegisterScreen = () => {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
 
-    const SubmiitHandler = async (e) => {
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+
+    const { userInfo } = useSelector((state) => state.auth);
+    const [register, { isLoading }] = useRegisterMutation();
+    
+    useEffect(() => {
+      if (userInfo) {
+        navigate('/');
+      }
+    }, [userInfo, navigate]);
+
+    const SubmitHandler = async (e) => {
         e.preventDefault();
-        console.log('submit')
+        if (password !== confirmPassword) {
+          toast.error('Passwords do not match');
+        } else {
+          try {
+            const res = await register({ name, email, password }).unwrap();
+            dispatch(setCredentials({ ...res }));
+            navigate('/');
+          } catch (err) {
+            toast.error(err?.data?.message || err.error);
+          }
+        }
 
     }
 
@@ -19,7 +46,7 @@ const RegisterScreen = () => {
     <FormContainer>
       <h1 className="text-2xl font-bold mb-6 text-center">Sign Up</h1>
 
-      <form onSubmit={SubmiitHandler} className="space-y-4">
+      <form onSubmit={SubmitHandler} className="space-y-4">
       <div className="my-2">
           <label htmlFor="name" className="block text-sm font-medium text-gray-700">
             Name
@@ -75,7 +102,7 @@ const RegisterScreen = () => {
             onChange={(e) => setConfirmPassword(e.target.value)}
           />
         </div>
-
+          {isLoading && <Spinner />}
         <button
           
           type="submit"
