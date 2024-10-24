@@ -14,9 +14,8 @@ const ProfileScreen = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-    const [image, setImage] = useState(null); 
-    const [profileImage, setProfileImage] = useState('');
-    
+     
+   
 
     const dispatch = useDispatch();
     const { userInfo } = useSelector((state) => state.auth);
@@ -27,12 +26,10 @@ const ProfileScreen = () => {
     useEffect(() => {
      setName(userInfo.name);
      setEmail(userInfo.email);
-     setProfileImage(userInfo.profileImage);
-    }, [userInfo.setName, userInfo.setEmail, userInfo.profileImage]);
+     
+    }, [userInfo.setName, userInfo.setEmail]);
 
-    const handleImageChange = (e) => {
-      setImage(e.target.files[0]); 
-  };
+    
 
     const SubmitHandler = async (e) => {
         e.preventDefault();
@@ -43,9 +40,7 @@ const ProfileScreen = () => {
           formData.append('name', name);
           formData.append('email', email);
           formData.append('password', password);
-          if (image) {
-            formData.append('image', image); 
-          }
+          
           try {
             const res = await updateProfile(formData).unwrap();
             dispatch(setCredentials({ ...res }));
@@ -91,20 +86,7 @@ const ProfileScreen = () => {
           />
         </div>
 
-        <div className="my-2">
-          <label htmlFor="profileImage" className="block text-sm font-medium text-gray-700">
-            Profile Image (optional)
-          </label>
-          {/* dispaly image if exists */}
-          {profileImage && <img src={profileImage} alt="Profile" className="w-20 h-20 rounded-full" />}
-          <input
-            type="file"
-            id="profileImage"
-            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-            onChange={handleImageChange} 
-          />
-        </div>
-
+       
         <div className="my-2">
           <label htmlFor="password" className="block text-sm font-medium text-gray-700">
             Password

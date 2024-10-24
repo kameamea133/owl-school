@@ -1,6 +1,7 @@
 import asyncHandler from "express-async-handler";
 import User from "../models/userModel.js";
 import generateToken from "../utils/generateToken.js";
+import cloudinary from "../config/cloudinary.js";
 
 const authUser = asyncHandler(async (req, res) => {
     const { email, password } = req.body;
@@ -13,7 +14,7 @@ const authUser = asyncHandler(async (req, res) => {
             _id: user._id,
             name: user.name,    
             email: user.email,
-            profileImage: user.profileImage,
+            image: user.profileImage,
         });
     } else {
         res.status(401);
@@ -24,7 +25,6 @@ const authUser = asyncHandler(async (req, res) => {
 
 const registerUser = asyncHandler(async (req, res) => {
     try {
-    
         const { name, email, password, role } = req.body;
     
         const userExists = await User.findOne({ email });
@@ -33,13 +33,17 @@ const registerUser = asyncHandler(async (req, res) => {
           res.status(400);
           throw new Error('User already exists');
         }
-    
+
         let profileImageUrl = '';
+
+        if (req.files && req.files.profileImage) {
+            const file = req.files.profileImage; 
+            const result = await cloudinary.v2.uploader.upload(file.tempFilePath, {
+              folder: 'profile_pics',
+            });
+            profileImageUrl = result.secure_url; 
+          }
     
-       
-        if (req.file) {
-          profileImageUrl = req.file.path; 
-        }
     
         const user = await User.create({
           name,
@@ -47,15 +51,16 @@ const registerUser = asyncHandler(async (req, res) => {
           password,
           role,
           profileImage: profileImageUrl,
+          
         });
-    
+   
         if (user) {
           res.status(201).json({
             _id: user._id,
             name: user.name,
             email: user.email,
             role: user.role,
-            profileImage: user.profileImage, 
+            profileImage: user.profileImage,
           });
         } else {
           res.status(400);
@@ -112,26 +117,6 @@ const updateUserProfile = asyncHandler(async (req, res) => {
     }
 })
 
-const updateProfileImage = asyncHandler(async (req, res) => {
-    const user = await User.findById(req.user._id);
 
-    if (user) {
-       
-        if (req.file) {
-            const imageUrl = req.file.path; 
-            user.profileImage = imageUrl;
-        }
 
-        const updatedUser = await user.save();
-
-        res.status(200).json({
-            message: 'Profile image updated',
-            profileImage: updatedUser.profileImage, 
-        });
-    } else {
-        res.status(404);
-        throw new Error('User not found');
-    }
-});
-
-export { authUser, registerUser, logoutUser, getUserProfile, updateUserProfile, updateProfileImage };
+export { authUser, registerUser, logoutUser, getUserProfile, updateUserProfile };
