@@ -21,7 +21,7 @@ const RegisterScreen = () => {
     const [register, { isLoading }] = useRegisterMutation();
 
     const handleImageChange = (e) => {
-      setImage(e.target.files[0]);  // Capturer le fichier image
+      setImage(e.target.files[0]);  
   };
 
 

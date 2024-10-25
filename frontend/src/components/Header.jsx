@@ -24,20 +24,20 @@ const Header = () => {
  
   const [isOpen, setIsOpen] = useState(false);
  
-  // Fonction pour toggle le menu mobile
+  
   const toggleMenu = () => setIsOpen(!isOpen);
 
   const handleLogoClick = () => {
-    navigate('/'); // Redirection vers la page d'accueil
+    navigate('/'); 
   };
 
   const handleProfileClick = () => {
     navigate("/profile");
-    setIsOpen(false); // Fermer le menu après la redirection
+    setIsOpen(false); 
   };
   const handleSignIn = () => {
-    navigate("/login"); // Redirection vers /login
-    setIsOpen(false); // Fermer le menu après la redirection
+    navigate("/login"); 
+    setIsOpen(false); 
   };
 
   const handleSignUp = () => {
