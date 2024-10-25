@@ -67,7 +67,7 @@ const Header = () => {
         
         {user ? (
             <>
-            
+              <img src={user.profileImage} alt="user picture" className="w-10 h-10 rounded-full object-cover"/>
               <span className="block py-2 px-4  text-white ">
                 Welcome {user.name} 
               </span>
@@ -118,11 +118,7 @@ const Header = () => {
             {user ? (
                 <>
                 <li className="flex items-center justify-center space-x-2">
-                    <img
-                      src={user.profileImage || "/defaultAvatar.png"} 
-                      alt="Profile Avatar"
-                      className="w-10 h-10 rounded-full object-cover"
-                    />
+                <img src={user.profileImage} alt="user picture" className="w-10 h-10 rounded-full object-cover"/>
                     <span className="text-white">{user.name}</span> 
                   </li>
                   <li>

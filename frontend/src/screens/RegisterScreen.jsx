@@ -12,13 +12,18 @@ const RegisterScreen = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-    
+    const [image, setImage] = useState(null);
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
     const { userInfo } = useSelector((state) => state.auth);
     const [register, { isLoading }] = useRegisterMutation();
+
+    const handleImageChange = (e) => {
+      setImage(e.target.files[0]);  // Capturer le fichier image
+  };
+
 
     
     
@@ -33,14 +38,15 @@ const RegisterScreen = () => {
         if (password !== confirmPassword) {
           toast.error('Passwords do not match');
         } else {
-          const formData = new FormData();
-            formData.append('name', name);
-            formData.append('email', email);
-            formData.append('password', password);
-            
-           
+          const data = {
+            name,
+            email,
+            password,
+            profileImage: image,
+          };
+          
           try {
-            const res = await register(formData).unwrap();
+            const res = await register(data).unwrap();
             
             dispatch(setCredentials({ ...res }));
             navigate('/');
@@ -112,7 +118,16 @@ const RegisterScreen = () => {
             onChange={(e) => setConfirmPassword(e.target.value)}
           />
         </div>
-
+        <div className="my-2">
+                    <label htmlFor="image" className="block text-sm font-medium text-gray-700">Image</label>
+                    <input
+                        type="file"
+                        id="image"
+                        name="profileImage"
+                        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                        onChange={handleImageChange}  // Gestion du fichier image
+                    />
+                </div>
 
           {isLoading && <Spinner />}
         <button

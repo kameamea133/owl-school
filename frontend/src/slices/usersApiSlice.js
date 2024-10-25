@@ -23,7 +23,7 @@ export const usersApiSlice = apiSlice.injectEndpoints({
     if (data.profileImage) {
       formData.append('profileImage', data.profileImage);
     }
-
+    
     return {
       url: `${USERS_URL}`,
       method: 'POST',

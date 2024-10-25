@@ -14,7 +14,7 @@ const authUser = asyncHandler(async (req, res) => {
             _id: user._id,
             name: user.name,    
             email: user.email,
-            image: user.profileImage,
+            profileImage: user.profileImage,
         });
     } else {
         res.status(401);
@@ -24,8 +24,10 @@ const authUser = asyncHandler(async (req, res) => {
 
 
 const registerUser = asyncHandler(async (req, res) => {
+  console.log("req.file",req.file)
+  console.log("req.body",req.body)
+    const { name, email, password, role } = req.body;
     try {
-        const { name, email, password, role } = req.body;
     
         const userExists = await User.findOne({ email });
     
@@ -44,7 +46,7 @@ const registerUser = asyncHandler(async (req, res) => {
             profileImageUrl = result.secure_url; 
           }
     
-    
+    console.log("profileImageUrl",profileImageUrl)
         const user = await User.create({
           name,
           email,
