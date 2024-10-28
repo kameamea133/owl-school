@@ -42,9 +42,21 @@ userSchema.pre('save', async function (next) {
     this.password = await bcrypt.hash(this.password, salt);
 });
 
+
+
 userSchema.methods.matchPassword = async function (enteredPassword) {
     return await bcrypt.compare(enteredPassword, this.password);
 }
+
+userSchema.methods.checkIsAdmin = function () {
+    return this.isAdmin || this.role === 'admin';
+};
+
+
+userSchema.methods.checkIsTeacher = function () {
+    return this.role === 'teacher';
+};
+
 
 const User = mongoose.model("User", userSchema);
 

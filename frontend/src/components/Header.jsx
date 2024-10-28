@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useLogoutMutation } from "../slices/usersApiSlice";
 import { logout } from "../slices/authSlice";
+import { Button } from "./ui/button";
 
 const Header = () => {
   const user = useSelector((state) => state.auth.userInfo);
@@ -53,6 +54,7 @@ const Header = () => {
         <div onClick={handleLogoClick} className="text-white font-bold text-xl flex items-center gap-2 cursor-pointer">
           <img src="/logoMyTeachersApp.png" alt="logo" className="w-20 h-20 rounded-full" />
           Owl School
+          
         </div>
 
         {/* icon menu */}
@@ -74,6 +76,7 @@ const Header = () => {
               <button
                 onClick={handleProfileClick} 
                 className="block py-2 px-4 bg-white text-green-600 rounded-lg hover:bg-gray-100"
+                
               >
                 Profile
               </button>
@@ -87,18 +90,20 @@ const Header = () => {
           ) : (
             <>
               {/* if not logged in - sign in and sign up */}
-              <button
+              <Button
                 onClick={handleSignIn}
-                className="block py-2 px-4 bg-white text-blue-600 rounded-lg hover:bg-gray-100"
+                // className="block py-2 px-4 bg-white text-blue-600 rounded-lg hover:bg-gray-100"
+                variant="secondary"
               >
                 Sign In
-              </button>
-              <button
+              </Button>
+              <Button
                 onClick={handleSignUp}
-                className="block py-2 px-4 bg-white text-blue-600 rounded-lg hover:bg-gray-100"
+                // className="block py-2 px-4 bg-white text-blue-600 rounded-lg hover:bg-gray-100"
+                variant="secondary"
               >
                 Sign Up
-              </button>
+              </Button>
             </>
           )}
         </div>

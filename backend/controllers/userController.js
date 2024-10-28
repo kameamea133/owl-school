@@ -24,8 +24,7 @@ const authUser = asyncHandler(async (req, res) => {
 
 
 const registerUser = asyncHandler(async (req, res) => {
-  console.log("req.file",req.file)
-  console.log("req.body",req.body)
+  
     const { name, email, password, role } = req.body;
     try {
     
@@ -46,7 +45,7 @@ const registerUser = asyncHandler(async (req, res) => {
             profileImageUrl = result.secure_url; 
           }
     
-    console.log("profileImageUrl",profileImageUrl)
+    
         const user = await User.create({
           name,
           email,
