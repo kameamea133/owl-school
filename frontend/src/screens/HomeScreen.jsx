@@ -4,7 +4,7 @@ import Hero from "../components/Hero"
 const HomeScreen = () => {
   return (
     <div>
-      <Hero />
+      <Hero title="" buttonText="Get Started" buttonAction={() => {}}/>
     </div>
   )
 }

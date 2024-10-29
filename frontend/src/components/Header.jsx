@@ -48,12 +48,11 @@ const Header = () => {
 
 
   return (
-    <header className="bg-black w-full sticky top-0 z-50">
+    <header className="bg-transparent w-full sticky top-0 z-50">
       <nav className="container mx-auto px-4 py-4 flex items-center justify-between">
         {/* left - logo */}
         <div onClick={handleLogoClick} className="text-white font-bold text-xl flex items-center gap-2 cursor-pointer">
           <img src="/logoMyTeachersApp.png" alt="logo" className="w-20 h-20 rounded-full" />
-          Owl School
           
         </div>
 
